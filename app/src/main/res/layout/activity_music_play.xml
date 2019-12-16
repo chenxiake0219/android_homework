@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorContent">
+
+    <com.example.acticitytest.View.TitleLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.example.acticitytest.View.TitleLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="7"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/musicCover"
+            android:layout_width="250dp"
+            android:layout_height="250dp"></ImageView>
+
+        <TextView
+            android:id="@+id/currentPlayMusicName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:layout_marginTop="40dp"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="marquee"
+            android:scrollHorizontally="true"
+            android:textColor="#fff"
+            ></TextView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp">
+
+            <SeekBar
+                android:id="@+id/musicSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="40dp"
+                ></SeekBar>
+
+            <ImageView
+                android:id="@+id/playAndPause"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:onClick="playAndPause"
+                />
+
+            <ImageView
+                android:id="@+id/musicNext"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_toRightOf="@+id/playAndPause"
+                android:background="@drawable/icon_next"
+                android:layout_marginTop="20dp"
+                android:onClick="musicNext"
+                />
+
+            <ImageView
+                android:id="@+id/musicPrevious"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_toLeftOf="@+id/playAndPause"
+                android:background="@drawable/icon_previous"
+                android:layout_marginTop="20dp"
+                android:onClick="musicPrevious"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    
+</LinearLayout>

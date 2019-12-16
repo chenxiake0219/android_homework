@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorContent">
+
+    <com.example.acticitytest.View.TitleLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.example.acticitytest.View.TitleLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="屌人听屌歌"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/colorWhite"
+        android:layout_margin="10dp"
+        ></TextView>
+
+    <ListView
+        android:id="@+id/music_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight = "1"></ListView>
+
+    <Button
+        android:id="@+id/gotoMusicPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="爱了"
+        android:layout_gravity="center"
+        android:onClick="gotoMusicPlay"
+        android:textColor="@color/colorWhite"></Button>
+
+</LinearLayout>
