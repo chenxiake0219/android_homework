@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.acticitytest.View.TitleLayout
+    <com.example.playmusic.View.TitleLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.example.acticitytest.View.TitleLayout>
+        android:layout_height="wrap_content"></com.example.playmusic.View.TitleLayout>
 
     <ListView
         android:id="@+id/list_view"

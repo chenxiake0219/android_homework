@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.example.playmusic.Activity.FourthActivity;
 import com.example.playmusic.R;
 
 public class TitleLayout extends LinearLayout {

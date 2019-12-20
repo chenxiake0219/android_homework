@@ -58,10 +58,10 @@ public class LoginActivity extends AppCompatActivity {
             rememberPass.setChecked(true);
         }
 
-        intentFilter = new IntentFilter();
-        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        networkChangeReceiver = new NetworkChangeRecevier();
-        registerReceiver(networkChangeReceiver,intentFilter);
+//        intentFilter = new IntentFilter();
+//        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+//        networkChangeReceiver = new NetworkChangeRecevier();
+//        registerReceiver(networkChangeReceiver,intentFilter);
 
         log_in.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){

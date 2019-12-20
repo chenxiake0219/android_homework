@@ -3,9 +3,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.example.acticitytest.View.TitleLayout
+    <com.example.playmusic.View.TitleLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.example.acticitytest.View.TitleLayout>
+        android:layout_height="wrap_content"></com.example.playmusic.View.TitleLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
