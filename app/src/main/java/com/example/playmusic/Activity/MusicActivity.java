@@ -1,8 +1,11 @@
 package com.example.playmusic.Activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +29,9 @@ public class MusicActivity extends AppCompatActivity {
     private List<Music> musicList = new ArrayList<>();
     TextView title_text;
     int index;
+    ListView listView;
+    MusicAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +43,14 @@ public class MusicActivity extends AppCompatActivity {
 //        初始化歌单
         initMusic();
 
-        MusicAdapter adapter = new MusicAdapter(MusicActivity.this,R.layout.music_item,musicList);
-        final ListView listView = findViewById(R.id.list_view);
+        adapter = new MusicAdapter(MusicActivity.this,R.layout.music_item,musicList);
+        listView = findViewById(R.id.list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String currentMusicName = musicList.get(i).getName();
-
                 Intent intent = new Intent(MusicActivity.this,MusicPlayActivity.class);
 //                将当前选的歌曲放入intent中
                 intent.putExtra("currentMusicName",currentMusicName);
