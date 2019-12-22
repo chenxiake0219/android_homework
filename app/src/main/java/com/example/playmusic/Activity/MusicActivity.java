@@ -3,35 +3,37 @@ package com.example.playmusic.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.playmusic.Adapter.Music;
 import com.example.playmusic.Adapter.MusicAdapter;
 import com.example.playmusic.R;
-import com.example.playmusic.SQLite.MyDatabaseHelper;
+import com.example.playmusic.SQLite.musicTable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MusicActivity extends AppCompatActivity {
-    private MyDatabaseHelper dbHelper = new MyDatabaseHelper(this, "Music.db",null,5);
+    private musicTable musicTable = new musicTable(this, "Music.db",null,7);
 
     private List<Music> musicList = new ArrayList<>();
+    TextView title_text;
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_layout);
 
+        title_text = findViewById(R.id.title_text);
+        title_text.setText("我喜欢的音乐");
 //        初始化歌单
         initMusic();
 
@@ -61,11 +63,12 @@ public class MusicActivity extends AppCompatActivity {
 
 //    对歌单列表初始化
     private void initMusic(){
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = musicTable.getWritableDatabase();
         Music currentMusic;
         int currentMusicFile;
         Cursor cursor = db.rawQuery("select * from Music",null);
         if(cursor.moveToFirst()){
+            index = 1;
             do{
 //                    如果state属性是1的话显示歌曲
                 if(cursor.getInt(cursor.getColumnIndex("state")) == 1){
@@ -74,10 +77,8 @@ public class MusicActivity extends AppCompatActivity {
 //                    歌曲地址
                     currentMusicFile = getResources().getIdentifier(musicName, "raw",  getPackageName());
 
-//                    Log.d("test", "currentMusicFile" + currentMusicFile);
-//                    Log.d("test", "R.raw.qianqianquege" + R.raw.qianqianquege);
-//                    Log.d("test", "R.raw.yuebanxiaoyequ" + R.raw.yuebanxiaoyequ);
-                    currentMusic = new Music(musicName,currentMusicFile,R.drawable.play);
+                    currentMusic = new Music(index, musicName,currentMusicFile,R.drawable.play);
+                    index++;
                     musicList.add(currentMusic);
                 }
             }while(cursor.moveToNext());

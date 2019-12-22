@@ -8,27 +8,26 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
 import com.example.playmusic.R;
 
-public class MusicAdapter extends ArrayAdapter<Music> {
+import java.util.List;
+
+public class MusicAllAdapter extends ArrayAdapter<MusicAll> {
 
     private int resourceId;
 
-    public MusicAdapter(Context context, int textViewResourceId, List<Music>objects){
+    public MusicAllAdapter(Context context, int textViewResourceId, List<MusicAll>objects){
         super(context,textViewResourceId,objects);
         resourceId = textViewResourceId;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
-        Music music = getItem(position);
+        MusicAll musicAll = getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
-        TextView musicindex = (TextView) view.findViewById(R.id.music_index);
         TextView musicname = (TextView) view.findViewById(R.id.music_name);
         ImageView play = view.findViewById(R.id.play);
-        play.setImageResource(music.getImageId());
-        musicname.setText(music.getName());
-        musicindex.setText(Integer.toString(music.getIndex()));
+        play.setImageResource(musicAll.getImageId());
+        musicname.setText(musicAll.getName());
         return view;
     }
 

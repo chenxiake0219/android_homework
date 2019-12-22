@@ -8,17 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></com.example.playmusic.View.TitleLayout>
 
-
-        <Button
-            android:id="@+id/create"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="创建数据库"
-            android:textAllCaps="false"
-            android:background="@color/colorSuccess"
-            android:textColor="@color/colorBlack"></Button>
-
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

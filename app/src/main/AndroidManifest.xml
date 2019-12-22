@@ -30,9 +30,6 @@
         <activity android:name=".Activity.MusicListActivity" />
         <activity android:name=".Activity.SQLiteActivity" />
         <activity android:name=".Activity.MusicActivity" />
-        <activity android:name=".Activity.FourthActivity" />
-        <activity android:name=".Activity.ThirdActivity" />
-        <activity android:name=".Activity.SecondActivity" />
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -3,16 +3,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorContent">
 
     <com.example.playmusic.View.TitleLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></com.example.playmusic.View.TitleLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="洗洗睡吧"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/colorWhite"
+        android:layout_margin="10dp"
+        ></TextView>
+
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"></ListView>
 
 
 </LinearLayout>

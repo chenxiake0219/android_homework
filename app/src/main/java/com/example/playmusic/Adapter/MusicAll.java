@@ -1,24 +1,15 @@
 package com.example.playmusic.Adapter;
 
-public class Music {
-    private int index;
+public class MusicAll {
     private String name;
     private int file;
     private int imageId;
 
-    public Music(String name,int file,int imageId){
+    public MusicAll(String name, int file, int imageId){
         this.name = name;
         this.file = file;
         this.imageId = imageId;
     }
-
-    public Music(int index, String name,int file,int imageId){
-        this.index = index;
-        this.name = name;
-        this.file = file;
-        this.imageId = imageId;
-    }
-
     public String getName(){
         return name;
     }
@@ -33,10 +24,6 @@ public class Music {
 
     public void setFile(int file){
         this.file = file;
-    }
-
-    public int getIndex(){
-        return index;
     }
 
     public int getImageId(){

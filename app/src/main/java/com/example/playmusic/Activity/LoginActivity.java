@@ -9,21 +9,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.playmusic.R;
+import com.example.playmusic.SQLite.musicTable;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginActivity extends AppCompatActivity {
-
+    private musicTable musicTable = new musicTable(this, "Music.db",null,7);
     private EditText login_account;
     private EditText login_password;
     private ImageView imageView;
@@ -58,11 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             rememberPass.setChecked(true);
         }
 
-//        intentFilter = new IntentFilter();
-//        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-//        networkChangeReceiver = new NetworkChangeRecevier();
-//        registerReceiver(networkChangeReceiver,intentFilter);
-
         log_in.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
 
@@ -70,7 +69,10 @@ public class LoginActivity extends AppCompatActivity {
                     case R.id.log_in:
                         String account = login_account.getText().toString();
                         String password = login_password.getText().toString();
-                        if(account.equals("admin") && password.equals("123")){
+                        String md5_password = md5(password);
+                        SQLiteDatabase db = musicTable.getWritableDatabase();
+                        Cursor cursor = db.rawQuery("select * from User where account = ? and password = ?",new String[]{account, md5_password});
+                        if(cursor.moveToFirst()) {
                             editor = pref.edit();
                             if(rememberPass.isChecked()){
                                 editor.putBoolean("remember_password",true);
@@ -80,8 +82,15 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.clear();
                             }
                             editor.apply();
-                            Intent intent = new Intent(LoginActivity.this,SQLiteActivity.class);
-                            startActivity(intent);
+                            int userPrivate = cursor.getInt(cursor.getColumnIndex("private"));
+                            if(userPrivate == 1){
+                                Intent intent = new Intent(LoginActivity.this,SQLiteActivity.class);
+                                startActivity(intent);
+                            }else if(userPrivate == 0){
+                                Intent intent = new Intent(LoginActivity.this,MusicListActivity.class);
+                                startActivity(intent);
+                            }
+
                         }else{
 //                            对话框AlertDialog
                             AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this);
@@ -105,12 +114,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public  void music(View v){
-        Intent intent = new Intent(LoginActivity.this,MusicActivity.class);
-        startActivity(intent);
-    }
-
-
     protected void onDestroy(){
         super.onDestroy();
         unregisterReceiver(networkChangeReceiver);
@@ -125,5 +128,30 @@ public class LoginActivity extends AppCompatActivity {
     public void noAccount(View view){
         Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(intent);
+    }
+
+    public static final String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

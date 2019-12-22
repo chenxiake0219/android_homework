@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.playmusic.R;
-import com.example.playmusic.SQLite.MyDatabaseHelper;
+import com.example.playmusic.SQLite.musicTable;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -27,7 +27,7 @@ import java.util.List;
 public class MusicPlayActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
-    private MyDatabaseHelper dbHelper = new MyDatabaseHelper(this, "Music.db",null,5);
+    private musicTable dbHelper = new musicTable(this, "Music.db",null,7);
 
     private List<String> musicList = new ArrayList<>();
     private List<Integer> musicId = new ArrayList<>();
@@ -38,7 +38,7 @@ public class MusicPlayActivity extends AppCompatActivity {
     ImageView playAndPause;
     ImageView musicNext;
     ImageView musicPrevious;
-
+    TextView title_text;
 
 //    Binder
 private MusicPlayService.MusicPlayBinder musicPlayBinder;
@@ -178,7 +178,8 @@ private MusicPlayService.MusicPlayBinder musicPlayBinder;
         String str = "music"+i;
         Intent intent = getIntent();
         String currentMusicName = intent.getStringExtra("currentMusicName");
-
+        title_text = findViewById(R.id.title_text);
+        title_text.setText(currentMusicName);
         while(intent.getStringExtra(str) != null){
             String musicName = intent.getStringExtra(str);
             if(currentMusicName.equals(musicName)){

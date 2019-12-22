@@ -2,26 +2,22 @@ package com.example.playmusic.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.playmusic.Adapter.Music;
 import com.example.playmusic.R;
-import com.example.playmusic.SQLite.MyDatabaseHelper;
+import com.example.playmusic.SQLite.musicTable;
 
 public class SQLiteActivity extends AppCompatActivity {
-    private MyDatabaseHelper dbHelper = new MyDatabaseHelper(this, "Music.db",null,5);
+    private musicTable musicTable = new musicTable(this, "Music.db",null,7);
     TextView title_text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +27,7 @@ public class SQLiteActivity extends AppCompatActivity {
         title_text = findViewById(R.id.title_text);
         title_text.setText("在后面搞来搞去");
 
-        Button createDatabase = findViewById(R.id.create);
-        createDatabase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dbHelper.getWritableDatabase();
-            }
-        });
+        musicTable.getWritableDatabase();
 
     }
 
@@ -46,7 +36,7 @@ public class SQLiteActivity extends AppCompatActivity {
         int haveMusic = 0;
         EditText music_name = findViewById(R.id.music_name);
         String addMusicName = music_name.getText().toString();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = musicTable.getWritableDatabase();
 
         Cursor cursor = db.rawQuery("select * from Music",null);
         if(cursor.moveToFirst()){
@@ -75,7 +65,7 @@ public class SQLiteActivity extends AppCompatActivity {
     public void deleteMusic(View v){
         EditText music_name = findViewById(R.id.music_name);
         String deleteMusicName = music_name.getText().toString();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = musicTable.getWritableDatabase();
         Log.d("test","1" + deleteMusicName + "1" );
         db.execSQL("delete from Music where musicName = ?",new String[]{deleteMusicName});
         Toast.makeText(SQLiteActivity.this,deleteMusicName+"歌曲删除成功",Toast.LENGTH_LONG).show();
