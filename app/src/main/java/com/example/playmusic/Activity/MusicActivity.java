@@ -26,7 +26,7 @@ import java.util.List;
 public class MusicActivity extends AppCompatActivity {
     private musicTable musicTable = new musicTable(this, "Music.db",null,7);
 
-    private List<Music> musicList = new ArrayList<>();
+    private List<Music> musicList;
     TextView title_text;
     int index;
     ListView listView;
@@ -40,7 +40,12 @@ public class MusicActivity extends AppCompatActivity {
 
         title_text = findViewById(R.id.title_text);
         title_text.setText("我喜欢的音乐");
-//        初始化歌单
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //        初始化歌单
         initMusic();
 
         adapter = new MusicAdapter(MusicActivity.this,R.layout.music_item,musicList);
@@ -66,11 +71,14 @@ public class MusicActivity extends AppCompatActivity {
         });
     }
 
-//    对歌单列表初始化
+    //    对歌单列表初始化
     private void initMusic(){
         SQLiteDatabase db = musicTable.getWritableDatabase();
         Music currentMusic;
         int currentMusicFile;
+        musicList = new ArrayList<>();
+
+
         Cursor cursor = db.rawQuery("select * from Music",null);
         if(cursor.moveToFirst()){
             index = 1;

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MusicListService extends Service {
 
-    private List<Integer> musicId = new ArrayList<>();
+    private List<Integer> musicId;
     int songIndex;
 
     private MusicListService.musicListBinder musicListBinder = new musicListBinder();
@@ -67,6 +67,8 @@ public class MusicListService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+//        非常重要，需要清空列表，不能只在后面加上
+        musicId = new ArrayList<>();
         //        对歌单列表进行初始化
         int i=0;
         String str = "music"+i;
@@ -75,7 +77,7 @@ public class MusicListService extends Service {
         while(intent.getIntExtra(str,0) != 0){
             int musicid = intent.getIntExtra(str,0);
             musicId.add(musicid);
-            Log.d("test", "onStartCommand: "+musicid);
+            Log.d("test", "onStartCommand: "+i + "  "+musicid);
             i++;
             str = "music"+i;
         }

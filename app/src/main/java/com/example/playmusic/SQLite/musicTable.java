@@ -8,7 +8,7 @@ import android.widget.Toast;
 public class musicTable extends SQLiteOpenHelper {
 
     public static final String CREATE_MUSIC = "create table Music( id integer primary key autoincrement, musicName text, state integer DEFAULT 0)";
-    public static final String CREATE_USER = "create table User( id integer primary key autoincrement, account char(20), password char(40),private integer DEFAULT 0)";
+    public static final String CREATE_USER = "create table User( id integer primary key autoincrement, username char(20), password char(40),private integer DEFAULT 0)";
     private Context mContext;
 
     public musicTable(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -19,7 +19,7 @@ public class musicTable extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER);
-        db.execSQL("insert into User(account,password,private) values(?,?,1)",new String[]{"admin","e10adc3949ba59abbe56e057f20f883e"});
+        db.execSQL("insert into User(username,password,private) values(?,?,1)",new String[]{"admin","e10adc3949ba59abbe56e057f20f883e"});
         db.execSQL(CREATE_MUSIC);
         Toast.makeText(mContext,"Create succeeded",Toast.LENGTH_SHORT).show();
     }

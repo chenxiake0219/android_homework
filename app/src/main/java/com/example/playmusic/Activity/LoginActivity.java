@@ -1,133 +1,130 @@
 package com.example.playmusic.Activity;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.playmusic.R;
 import com.example.playmusic.SQLite.musicTable;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
-public class LoginActivity extends AppCompatActivity {
-    private musicTable musicTable = new musicTable(this, "Music.db",null,7);
-    private EditText login_account;
-    private EditText login_password;
-    private ImageView imageView;
+
+public class LoginActivity extends Activity {
+    private EditText username;
+    private EditText password;
+    private ImageView btnLogin;
+    private SQLiteDatabase sql;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private CheckBox rememberPass;
 
-    private IntentFilter intentFilter;
-    private NetworkChangeRecevier networkChangeReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout);
+        setContentView(R.layout.login_mian);
+        initView();
 
-//        按钮
-        Button log_in = (Button)findViewById(R.id.log_in);
-//        输入框
-        login_account = (EditText) findViewById(R.id.login_account);
-        login_password = (EditText) findViewById(R.id.login_password);
-//        图片
-        imageView = (ImageView)findViewById(R.id.image_view);
+        initEvents();
 
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
-        rememberPass = (CheckBox) findViewById(R.id.remember_pass);
-        boolean isRemember = pref.getBoolean("remember_password",false);
-        if(isRemember){
-            String account = pref.getString("account","");
-            String password = pref.getString("password","");
-            login_account.setText(account);
-            login_password.setText(password);
-            rememberPass.setChecked(true);
-        }
+    }
 
-        log_in.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-
-                switch (v.getId()){
-                    case R.id.log_in:
-                        String account = login_account.getText().toString();
-                        String password = login_password.getText().toString();
-                        String md5_password = md5(password);
-                        SQLiteDatabase db = musicTable.getWritableDatabase();
-                        Cursor cursor = db.rawQuery("select * from User where account = ? and password = ?",new String[]{account, md5_password});
-                        if(cursor.moveToFirst()) {
-                            editor = pref.edit();
-                            if(rememberPass.isChecked()){
-                                editor.putBoolean("remember_password",true);
-                                editor.putString("account",account);
-                                editor.putString("password",password);
-                            }else{
-                                editor.clear();
-                            }
-                            editor.apply();
-                            int userPrivate = cursor.getInt(cursor.getColumnIndex("private"));
-                            if(userPrivate == 1){
-                                Intent intent = new Intent(LoginActivity.this,SQLiteActivity.class);
-                                startActivity(intent);
-                            }else if(userPrivate == 0){
-                                Intent intent = new Intent(LoginActivity.this,MusicListActivity.class);
-                                startActivity(intent);
-                            }
-
-                        }else{
-//                            对话框AlertDialog
-                            AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this);
-                            dialog.setTitle("Warning");
-                            dialog.setMessage("账号或者密码错误！");
-                            dialog.setCancelable(false);
-                            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            });
-                            dialog.show();
-                        }
-                        break;
-                        default:
-                            break;
-                }
+    private void initEvents() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submit();
             }
         });
-
     }
 
-    protected void onDestroy(){
-        super.onDestroy();
-        unregisterReceiver(networkChangeReceiver);
-    }
+    private void initView() {
+        username = (EditText) findViewById(R.id.username);
+        password = (EditText) findViewById(R.id.password);
+        btnLogin = (ImageView) findViewById(R.id.btn_login);
+        rememberPass = (CheckBox) findViewById(R.id.remember_pass);
 
-    class NetworkChangeRecevier extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent){
-            Toast.makeText(context,"network changes",Toast.LENGTH_SHORT).show();
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isRemember = pref.getBoolean("remember_password",false);
+        if(isRemember){
+            String usernamestr = pref.getString("username","");
+            String passwordstr = pref.getString("password","");
+            username.setText(usernamestr);
+            password.setText(passwordstr);
+            rememberPass.setChecked(true);
         }
+        musicTable helper = new musicTable(this, "Music.db",null,7);
+        sql = helper.getWritableDatabase();
     }
 
-    public void noAccount(View view){
-        Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
-        startActivity(intent);
+    private void submit() {
+        // validate
+        String usernameString = username.getText().toString().trim();
+        if (TextUtils.isEmpty(usernameString)) {
+            Toast.makeText(this, "用户名未输入完整", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String passwordString = password.getText().toString().trim();
+        if (TextUtils.isEmpty(passwordString)) {
+            Toast.makeText(this, "密码未输入完整", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String encryptionPasswordString = md5(passwordString);
+        Cursor cursor = sql.rawQuery("select * from User where username = ? and password = ?", new String[]{usernameString, encryptionPasswordString});
+        if(cursor.moveToFirst()) {
+            editor = pref.edit();
+            if(rememberPass.isChecked()){
+                editor.putBoolean("remember_password",true);
+                editor.putString("username",usernameString);
+                editor.putString("password",passwordString);
+            }else{
+                editor.clear();
+            }
+            editor.apply();
+            int userPrivate = cursor.getInt(cursor.getColumnIndex("private"));
+            if(userPrivate == 1){
+                Intent intent = new Intent(LoginActivity.this,SQLiteActivity.class);
+                startActivity(intent);
+            }else if(userPrivate == 0){
+                Intent intent = new Intent(LoginActivity.this,MusicListActivity.class);
+                startActivity(intent);
+            }
+        }else{
+//                            对话框AlertDialog
+            AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this);
+            dialog.setTitle("Warning");
+            dialog.setMessage("账号或者密码错误！");
+            dialog.setCancelable(false);
+            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            dialog.show();
+        }
+        cursor.close();
+
     }
 
     public static final String md5(final String s) {
@@ -153,5 +150,10 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public void goToRegiste(View view){
+        Intent intent = new Intent(this,RegisterActivity.class);
+        startActivity(intent);
     }
 }

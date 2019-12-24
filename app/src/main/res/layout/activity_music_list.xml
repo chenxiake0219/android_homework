@@ -34,6 +34,6 @@
         android:text="爱了"
         android:layout_gravity="center"
         android:onClick="gotoMusicPlay"
-        android:textColor="@color/colorWhite"></Button>
+        android:textColor="@color/colorBlack"></Button>
 
 </LinearLayout>

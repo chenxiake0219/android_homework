@@ -205,7 +205,7 @@ private MusicPlayService.MusicPlayBinder musicPlayBinder;
             startService(MusicPlayintent); // 启动服务
             bindService(MusicPlayintent, connectionMusicPlayBinder, BIND_AUTO_CREATE); // 绑定服务
 
-
+            Log.d("test", "onCreate: test " + musicId.size());
 //            歌单列表服务
             Intent MusicListIntent = new Intent(this,MusicListService.class);
             for(int j=0;j<musicId.size();j++){
